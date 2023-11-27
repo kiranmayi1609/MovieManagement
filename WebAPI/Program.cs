@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using WebAPI.Interfaces;
+using WebAPI.Models;
 using WebAPI.Repo;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,7 @@ builder.Services.AddSwaggerGen();
 // Database
 builder.Services.AddDbContext<MovieDbContext>(option =>
 option.UseSqlServer(builder.Configuration.GetConnectionString("connection"))); // design pattern that connects to the database
+builder.Services.AddScoped<IGeneric<Movies>, GenericRepocs<Movies>>();
 
 var app = builder.Build();
 

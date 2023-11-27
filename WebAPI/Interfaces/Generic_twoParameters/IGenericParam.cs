@@ -1,9 +1,23 @@
 ﻿namespace WebAPI.Interfaces.Generic_twoParameters
 {
-    public interface IGenericParam<T1, T2 > where T1 : class where T2 : class
+    public interface IGenericParam<T1Entity, T2Entity > where T1Entity : class where T2Entity : class
     {
-        //IEnumerable<T> GetAll();
-        //T GetbyId(int id);
+        //mETHODS ON THE FIRST ENTITY 
+        public void create(T1Entity entity);
+        public void Delete(T1Entity entity);
+        public IEnumerable<T1Entity> GetAllEntities();
+        public T1Entity GetEntityByID(int id);
+        public void UpdateEntity(T1Entity entity);
+
+        //Methods on the second entity 
+
+        public void create(T2Entity entity);
+        public void Delete(T2Entity entity);
+        public IEnumerable<T2Entity> GetAll();
+        public T2Entity GetEntity(int id);
+        public void UpdateEntity(T2Entity entity);
+
+
 
     }
 }

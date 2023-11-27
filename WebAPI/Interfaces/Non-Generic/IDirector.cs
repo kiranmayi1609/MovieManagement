@@ -1,4 +1,5 @@
-﻿using WebAPI.Models;
+﻿using WebAPI.Dto;
+using WebAPI.Models;
 
 namespace WebAPI.Interfaces.Non_Generic
 {
@@ -7,7 +8,7 @@ namespace WebAPI.Interfaces.Non_Generic
         IEnumerable<Director> GetDirectors();
         IEnumerable<Director> GetDirectors(string name);
 
-        void Create (Director director);
+        void Create (DirectorDto directordto);
 
         void Update (Director director);
 

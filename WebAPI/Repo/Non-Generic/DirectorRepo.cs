@@ -1,8 +1,8 @@
 ﻿namespace WebAPI.Repo.Non_Generic
 {
-    public class CountryRepo
+    public class DirectorRepo
     {
-        public int CountryId { get; set; }
+        public int DirectorId { get; set; }
         public string Name { get; set; }
     }
 }

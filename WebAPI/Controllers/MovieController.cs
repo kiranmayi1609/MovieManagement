@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
+using WebAPI.Dto;
 using WebAPI.Models;
 using WebAPI.Repo;
 
@@ -44,20 +46,35 @@ namespace WebAPI.Controllers
         }
         //Post:api/Movies 
         [HttpPost]
-        public ActionResult Post([FromBody] Movies movie)
+        public ActionResult CreateMovie([FromBody] MoviesDTO moviedto)
         {
-            //Check if the model state is valid (based on data annotations )
-            if(ModelState.IsValid)
+
+            try
             {
-                //Create the new movie in the repository 
-                _MovieRepository.Create(movie);
-                //Return the created movie as an HTTP 200 ok response 
-                return Ok(movie);
+                var movies = new Movies
+                {
+                    Title = moviedto.Title,
+                    DirectorId = moviedto.DirectorId
+                };
+                _MovieRepository.Create(movies);
+                return Ok();
             }
-            //if the model state is not valid ,return an Http 400 bad request response 
-            return BadRequest(ModelState);
+            catch(Exception ex)
+            {
+                return BadRequest(ex.InnerException!=null? ex.InnerException.Message:ex.Message);
+            }
+            //Check if the model state is valid (based on data annotations )
+            //if(ModelState.IsValid)
+            //{
+            //    //Create the new movie in the repository 
+            //    _MovieRepository.Create(movie);
+            //    //Return the created movie as an HTTP 200 ok response 
+            //    return Ok(movie);
+            //}
+            ////if the model state is not valid ,return an Http 400 bad request response 
+            //return BadRequest(ModelState);
         }
-        [HttpPut]
+        [HttpDelete]
         public ActionResult Delete(int id )
         {
             //Retreive the movie by its ID from the repository 
@@ -72,6 +89,29 @@ namespace WebAPI.Controllers
             //Return an HTTP 204 no content reposne 
             return NoContent();
         }
+        [HttpPut]
+        public ActionResult UpdateMovie(int id ,MoviesDTO movieDto)
+        {
+            var existingMovie=_MovieRepository.GetbyId(id);
+            if(existingMovie == null)
+            {
+                return NoContent();
+            }
+            existingMovie.Title = movieDto.Title;
+            existingMovie.DirectorId = movieDto.DirectorId;
+
+            try
+            {
+                _MovieRepository.Update(id,existingMovie);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+
+            }
+        }
+
 
 
     }

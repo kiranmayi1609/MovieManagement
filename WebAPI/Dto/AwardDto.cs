@@ -1,9 +1,10 @@
-﻿namespace WebAPI.Repo.Non_Generic
+﻿namespace WebAPI.Dto
 {
-    public class AwardRepo
+    public class AwardDto
     {
         public int AwardId { get; set; }
         public string AwardName { get; set; }
+
         public int MovieId { get; set; }
     }
 }

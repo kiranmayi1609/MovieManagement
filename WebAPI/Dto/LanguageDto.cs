@@ -1,6 +1,6 @@
-﻿namespace WebAPI.Repo.Non_Generic
+﻿namespace WebAPI.Dto
 {
-    public class LanguageRepo
+    public class LanguageDto
     {
         public int LanguageId { get; set; }
 

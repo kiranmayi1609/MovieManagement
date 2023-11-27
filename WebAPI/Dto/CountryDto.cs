@@ -1,6 +1,6 @@
-﻿namespace WebAPI.Repo.Non_Generic
+﻿namespace WebAPI.Dto
 {
-    public class CountryRepo
+    public class CountryDto
     {
         public int CountryId { get; set; }
         public string Name { get; set; }

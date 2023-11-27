@@ -29,7 +29,40 @@ namespace WebAPI.Repo
         public DbSet <Review>reviews { get; set; }
         public DbSet<User>users { get; set; }   
 
+        protected override  void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // seed the data for Actors 
 
+            modelBuilder.Entity<Actor>().HasData(
+                new Actor { ActorId = 1, Name = "Actor1" },
+                new Actor { ActorId = 2, Name = "Actor2" }
+
+                );
+
+            //seed the data for Awards 
+            modelBuilder.Entity<Award>().HasData (
+                  new Award { AwardId=1,AwardName="Best Actor",MovieId=1},
+                   new Award { AwardId=2,AwardName="Best Director",MovieId =2}
+
+                );
+            //Movies 
+            modelBuilder.Entity<Movies>().HasData(
+                new Movies { MovieId = 1, Title = "Movie 1", DirectorId = 1 },
+                new Movies { MovieId = 2, Title = "Movie 2", DirectorId = 2 });
+            //Directors 
+            modelBuilder.Entity<Director>().HasData(
+                new Director { DirectorId = 1, Name = "Director 1" },
+                new Director { DirectorId = 2, Name = "Director2" });
+            //Genres
+            modelBuilder.Entity<Genre>().HasData(
+                new Genre { GenreId = 1, Name = "Action" },
+                new Genre { GenreId = 2, Name = "Comedy" });
+            //Language 
+            modelBuilder.Entity<Language>().HasData(
+                new Language { LanguageId = 1, Name = "English" },
+                new Language { LanguageId = 2, Name = "Spanish " });
+
+        }
 
     }
 }

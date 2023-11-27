@@ -14,8 +14,19 @@ namespace WebAPI.Repo
 
         public void Create(T entity)
         {
-            _db.Set<T>().Add(entity);
-            _db.SaveChanges();
+            try
+            {
+                _db.Set<T>().Add(entity);
+                _db.SaveChanges();
+
+            }
+            catch(Exception ex)
+
+            {
+                throw new Exception("Error occured while using saving changes ",ex);
+
+            }
+            
         }
 
         public void Delete(T entity)
@@ -34,7 +45,7 @@ namespace WebAPI.Repo
           return _db.Set<T>().ToList()[id];
         }
 
-        public void Update(T entity)
+        public void Update(int id,T entity)
         {
             _db.Set<T>().Update(entity);
             _db.SaveChanges();
