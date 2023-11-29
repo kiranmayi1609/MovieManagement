@@ -12,8 +12,8 @@ using WebAPI.Repo;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(MovieDbContext))]
-    [Migration("20231103093820_MovieInit")]
-    partial class MovieInit
+    [Migration("20231128101006_Movieinit")]
+    partial class Movieinit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,6 +39,18 @@ namespace WebAPI.Migrations
                     b.HasKey("ActorId");
 
                     b.ToTable("actors");
+
+                    b.HasData(
+                        new
+                        {
+                            ActorId = 1,
+                            Name = "Actor1"
+                        },
+                        new
+                        {
+                            ActorId = 2,
+                            Name = "Actor2"
+                        });
                 });
 
             modelBuilder.Entity("WebAPI.Models.Award", b =>
@@ -53,17 +65,28 @@ namespace WebAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MoviesMovieId")
+                    b.Property<int>("MoviesId")
                         .HasColumnType("int");
 
                     b.HasKey("AwardId");
 
-                    b.HasIndex("MoviesMovieId");
+                    b.HasIndex("MoviesId");
 
                     b.ToTable("awards");
+
+                    b.HasData(
+                        new
+                        {
+                            AwardId = 1,
+                            AwardName = "Best Actor",
+                            MoviesId = 1
+                        },
+                        new
+                        {
+                            AwardId = 2,
+                            AwardName = "Best Director",
+                            MoviesId = 2
+                        });
                 });
 
             modelBuilder.Entity("WebAPI.Models.Booking", b =>
@@ -127,6 +150,18 @@ namespace WebAPI.Migrations
                     b.HasKey("DirectorId");
 
                     b.ToTable("directors");
+
+                    b.HasData(
+                        new
+                        {
+                            DirectorId = 1,
+                            Name = "Director 1"
+                        },
+                        new
+                        {
+                            DirectorId = 2,
+                            Name = "Director2"
+                        });
                 });
 
             modelBuilder.Entity("WebAPI.Models.Genre", b =>
@@ -143,7 +178,19 @@ namespace WebAPI.Migrations
 
                     b.HasKey("GenreId");
 
-                    b.ToTable("Genres");
+                    b.ToTable("genres");
+
+                    b.HasData(
+                        new
+                        {
+                            GenreId = 1,
+                            Name = "Action"
+                        },
+                        new
+                        {
+                            GenreId = 2,
+                            Name = "Comedy"
+                        });
                 });
 
             modelBuilder.Entity("WebAPI.Models.Language", b =>
@@ -161,6 +208,18 @@ namespace WebAPI.Migrations
                     b.HasKey("LanguageId");
 
                     b.ToTable("languages");
+
+                    b.HasData(
+                        new
+                        {
+                            LanguageId = 1,
+                            Name = "English"
+                        },
+                        new
+                        {
+                            LanguageId = 2,
+                            Name = "Spanish "
+                        });
                 });
 
             modelBuilder.Entity("WebAPI.Models.MovieActor", b =>
@@ -245,6 +304,20 @@ namespace WebAPI.Migrations
                     b.HasIndex("LanguageId");
 
                     b.ToTable("movies");
+
+                    b.HasData(
+                        new
+                        {
+                            MovieId = 1,
+                            DirectorId = 1,
+                            Title = "Movie 1"
+                        },
+                        new
+                        {
+                            MovieId = 2,
+                            DirectorId = 1,
+                            Title = "Movie 2"
+                        });
                 });
 
             modelBuilder.Entity("WebAPI.Models.Review", b =>
@@ -288,6 +361,10 @@ namespace WebAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -301,7 +378,7 @@ namespace WebAPI.Migrations
                 {
                     b.HasOne("WebAPI.Models.Movies", "Movies")
                         .WithMany("Awards")
-                        .HasForeignKey("MoviesMovieId")
+                        .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -330,7 +407,7 @@ namespace WebAPI.Migrations
             modelBuilder.Entity("WebAPI.Models.MovieActor", b =>
                 {
                     b.HasOne("WebAPI.Models.Actor", "Actor")
-                        .WithMany("MovieAct")
+                        .WithMany("MovieActor")
                         .HasForeignKey("ActorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -401,7 +478,7 @@ namespace WebAPI.Migrations
 
             modelBuilder.Entity("WebAPI.Models.Actor", b =>
                 {
-                    b.Navigation("MovieAct");
+                    b.Navigation("MovieActor");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Country", b =>

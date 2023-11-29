@@ -39,20 +39,22 @@ namespace WebAPI.Repo
 
                 );
 
-            //seed the data for Awards 
-            modelBuilder.Entity<Award>().HasData (
-                  new Award { AwardId=1,AwardName="Best Actor",MovieId=1},
-                   new Award { AwardId=2,AwardName="Best Director",MovieId =2}
 
-                );
-            //Movies 
-            modelBuilder.Entity<Movies>().HasData(
-                new Movies { MovieId = 1, Title = "Movie 1", DirectorId = 1 },
-                new Movies { MovieId = 2, Title = "Movie 2", DirectorId = 2 });
+                 modelBuilder.Entity<Award>().HasData(
+                      new Award { AwardId = 1, AwardName = "Best Actor", MoviesId = 1 },
+                    new Award { AwardId = 2, AwardName = "Best Director", MoviesId = 2 }
+                     );
             //Directors 
             modelBuilder.Entity<Director>().HasData(
                 new Director { DirectorId = 1, Name = "Director 1" },
                 new Director { DirectorId = 2, Name = "Director2" });
+
+            modelBuilder.Entity<Movies>().HasData(
+                new Movies { MovieId = 1, Title = "Movie 1" ,DirectorId=1},
+                new Movies { MovieId = 2, Title = "Movie 2",  DirectorId=1 }
+            );
+            
+           
             //Genres
             modelBuilder.Entity<Genre>().HasData(
                 new Genre { GenreId = 1, Name = "Action" },

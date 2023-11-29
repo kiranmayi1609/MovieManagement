@@ -29,10 +29,17 @@ namespace WebAPI.Repo
             
         }
 
-        public void Delete(T entity)
+        public void Delete(int id )
         {
-            _db.Set<T>().Remove(entity);
-            _db.SaveChanges();
+            var entityToDelete= _db.Set<T>().Find(id);
+            if(entityToDelete!=null)
+            {
+                _db.Set<T>().Remove(entityToDelete);
+                _db.SaveChanges();
+            }
+
+            //_db.Set<T>().Remove(entity);
+            //_db.SaveChanges();
         }
 
         public IEnumerable<T> GetAll()
@@ -42,13 +49,20 @@ namespace WebAPI.Repo
 
         public T GetbyId(int id)
         {
-          return _db.Set<T>().ToList()[id];
+            return _db.Set<T>().Find(id);
+          //return _db.Set<T>().ToList()[id];
         }
 
         public void Update(int id,T entity)
         {
-            _db.Set<T>().Update(entity);
-            _db.SaveChanges();
+            var existingEntity = _db.Set<T>().Find(id);
+            if (existingEntity != null)
+            {
+                _db.Entry(existingEntity).CurrentValues.SetValues(entity);
+                _db.SaveChanges();
+            }
+            //_db.Set<T>().Update(entity);
+            //_db.SaveChanges();
         }
     }
 }

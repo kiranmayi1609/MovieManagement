@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebAPI.Dto;
 using WebAPI.Models;
 using WebAPI.Repo;
 
@@ -25,7 +26,13 @@ namespace WebAPI.Controllers
             //Retrieve all movies from the repository 
             var genre = _GenreRepository.GetAll();
             //Return the list of movies as an Http 200 ok response 
-            return Ok(genre);
+            var genre1 = genre.Select(genre => new GenreDto
+            {
+                GenreId=genre.GenreId,
+                Name=genre.Name,
+
+            }).ToList();
+            return Ok(genre1);
 
         }
         [HttpGet("{id}")]
@@ -62,15 +69,29 @@ namespace WebAPI.Controllers
         {
             //Retreive the genre by its ID from the repository 
             var genre = _GenreRepository.GetbyId(id);
-            //if the genre is not found ,return an HTTP 404 not Found response 
-            if (genre == null)
+
+            if(genre== null)
             {
                 return NotFound();
             }
-            //Delete the genre  from the repistory 
-            _GenreRepository.Delete(genre);
-            //Return an HTTP 204 no content reposne 
-            return NoContent();
+            try
+            {
+                _GenreRepository.Delete(id);
+                return NoContent();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            ////if the genre is not found ,return an HTTP 404 not Found response 
+            //if (genre == null)
+            //{
+            //    return NotFound();
+            //}
+            ////Delete the genre  from the repistory 
+            //_GenreRepository.Delete(genre);
+            ////Return an HTTP 204 no content reposne 
+            //return NoContent();
         }
 
 

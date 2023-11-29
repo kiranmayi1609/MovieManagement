@@ -7,7 +7,8 @@ namespace WebAPI.Models
         [Key]
         public int AwardId { get; set; }
         public string AwardName { get; set; }   
-        public Movies Movies { get; set; }
-        public int MovieId { get; set; }
+        
+        public int MoviesId { get; set; }
+        public Movies Movies { get; set; }//
     }
 }

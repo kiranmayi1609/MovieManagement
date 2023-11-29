@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebAPI.Dto;
+using WebAPI.Interfaces;
+using WebAPI.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,36 +11,66 @@ namespace WebAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        // GET: api/<UserController>
+        private readonly IGeneric<User> _userRepository;
+        public UserController(IGeneric<User> userRepository)
+        {
+            _userRepository = userRepository;
+        }
+        //Get:api/user
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<IEnumerable<User>>GetAllUsers()
         {
-            return new string[] { "value1", "value2" };
+            var users = _userRepository.GetAll();
+            return Ok(users);
+        }
+        [HttpPost("{id}")]
+        public ActionResult<User>GetUserById(int id )
+        {
+            var user =_userRepository.GetbyId(id);
+            if(user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+        [HttpPost("register")]
+        public ActionResult RegisterUser([FromBody] UsersDto userDto)
+        {
+            try
+            {
+                var newuser = new User
+                {
+                    UserName = userDto.UserName,
+                    Password = userDto.Password,
+                };
+                _userRepository.Create(newuser);
+                return Ok("User registered successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+
+            }
+        }
+        [HttpPost("authenticate")]
+        public ActionResult AuthenticateUser([FromBody] UsersDto usersDto)
+        {
+            try
+            {
+                var user = _userRepository.GetAll.SingleOrDefault(u => u.UserName == usersDto.UserName && u.Password == usersDto.Password);
+                if(user== null )
+                {
+                    return Unauthorized("Invalid usernmae or password");
+                }
+                return Ok(new {Message="Authentication successful",UserId=user.UserId});    
+
+
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<UserController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

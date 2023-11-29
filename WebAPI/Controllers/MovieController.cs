@@ -27,7 +27,14 @@ namespace WebAPI.Controllers
             //Retrieve all movies from the repository 
             var movies=_MovieRepository.GetAll();
             //Return the list of movies as an Http 200 ok response 
-            return Ok(movies);
+            var movies1 = movies.Select(movie => new MoviesDTO
+            {
+                MovieId=movie.MovieId,
+                DirectorId = movie.DirectorId,
+                Title = movie.Title,
+
+            }).ToList();
+            return Ok(movies1);
 
         }
         [HttpGet("{id}")]
@@ -84,10 +91,19 @@ namespace WebAPI.Controllers
             {
                 return NotFound();
             }
-            //Delete the movie from the repistory 
-            _MovieRepository.Delete(movie);
-            //Return an HTTP 204 no content reposne 
-            return NoContent();
+            try
+            {
+                _MovieRepository.Delete(id);
+                return NoContent();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            ////Delete the movie from the repistory 
+            //_MovieRepository.Delete(movie);
+            ////Return an HTTP 204 no content reposne 
+            //return NoContent();
         }
         [HttpPut]
         public ActionResult UpdateMovie(int id ,MoviesDTO movieDto)

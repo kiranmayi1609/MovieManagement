@@ -10,7 +10,7 @@
 
        void Update (int id, T entity);
 
-       void Delete (T entity);
+       void Delete (int id );
       
 
     }
