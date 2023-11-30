@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 using System.Reflection;
 using WebAPI.Dto;
 using WebAPI.Models;
@@ -125,6 +126,42 @@ namespace WebAPI.Controllers
             {
                 return BadRequest(ex.Message);
 
+            }
+        }
+        [HttpGet("search")]
+
+        public IActionResult GetMoviesByTitle([FromQuery] string title)
+        {
+            try
+            {
+                var movies = _MovieRepository.FindEntities(movies => movies.Title.Contains(title));
+                return Ok(movies);
+            }
+            catch(Exception ex)
+            {
+               return StatusCode(500,$"An error occured :{ex.Message}");
+            }
+        }
+
+        [HttpGet("movies")]
+        public IActionResult GetMoviesWithIncludes()
+        {
+            try
+            {
+                Func<Movies, bool> moviePredicate = movie => movie.Title=="";
+
+                Expression<Func<Movies, object>>[] movieInclude =
+                {
+                    movie=>movie.Reviews,
+                    movie=>movie.MoviesGenre.Select(mg=>mg.Genre)
+                };
+
+                var moviesWithIncludes = _MovieRepository.GetEntitiesWithIncludes(moviePredicate, movieInclude);
+                return Ok(moviesWithIncludes);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, $"An error occured:{ex.Message} ");
             }
         }
 

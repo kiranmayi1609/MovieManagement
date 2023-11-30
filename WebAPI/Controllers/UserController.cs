@@ -57,7 +57,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var user = _userRepository.GetAll.SingleOrDefault(u => u.UserName == usersDto.UserName && u.Password == usersDto.Password);
+                var user = _userRepository.GetAll().SingleOrDefault(u => u.UserName == usersDto.UserName && u.Password == usersDto.Password);
                 if(user== null )
                 {
                     return Unauthorized("Invalid usernmae or password");
