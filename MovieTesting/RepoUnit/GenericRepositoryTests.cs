@@ -11,10 +11,10 @@ using Xunit;
 namespace MovieTesting.RepoUnit
 {
     //unit tests for GenericRepository using in-memory database 
-    public class GenericRepositoryTests
+    public class GenericRepositoryTests:IDisposable
     {
         private readonly MovieDbContext _dbContext;
-        private readonly GenericRepocs<Movies> _repository;
+        private readonly GenericRepocs<Movies> _movierepository;
 
         /// <summary>
         /// we want to take Db offline ,so we can focus on Repo layer 
@@ -29,22 +29,31 @@ namespace MovieTesting.RepoUnit
 
 
             _dbContext = new MovieDbContext(options);
-            _repository = new GenericRepocs<Movies>(_dbContext);
+            _movierepository = new GenericRepocs<Movies>(_dbContext);
+        }
+        public void Dispose()
+        {
+            _dbContext.Dispose();
         }
         [Fact]
-        public void Create_ShouldAddEntityToDatabase()
+        public void GetAll_ReturnsAllMovies()
         {
-            //Arrange 
-            var entity = new Movies { MovieId = 1, Title = "TestEntity1", DirectorId = 1 };
+            //arrange
+            _dbContext.movies.AddRange(new List<Movies>
+            {
+                new Movies{MovieId=1,Title="Movie 3"},
+                new Movies{MovieId=2,Title="Movie 4"}
+
+            });
+            _dbContext.SaveChanges();
 
             //Act 
-            _repository.Create(entity);
+            var movies = _movierepository.GetAll();
 
-            //Assert
-            Assert.Equal(1, _dbContext.movies.Count());
-            Assert.Equal("TestEntity",_dbContext.movies.Single().Title);
+            //Assert 
+            Assert.NotNull(movies);
+            Assert.Equal(2, movies.Count());// the count based on the added movies 
         }
-        
 
         
     }
