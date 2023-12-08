@@ -2,7 +2,7 @@
 {
     public class Actor
     {
-        public int ActorId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public ICollection<MovieActor> MovieActor { get; set; }
     }

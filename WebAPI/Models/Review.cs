@@ -10,7 +10,7 @@ namespace WebAPI.Models
 
         public int Rating { get; set; }
         public Movies Movies { get; set; }
-        public int MovieId { get; set; }
+        public int MoviesId { get; set; }
 
 
     }

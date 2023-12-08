@@ -28,7 +28,7 @@ namespace WebAPI.Controllers
             //Return the list of movies as an Http 200 ok response 
             var genre1 = genre.Select(genre => new GenreDto
             {
-                GenreId=genre.GenreId,
+                GenreId=genre.Id,
                 Name=genre.Name,
 
             }).ToList();

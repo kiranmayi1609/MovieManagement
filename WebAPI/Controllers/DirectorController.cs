@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebAPI.Dto;
+using WebAPI.Models;
+using WebAPI.Repo;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,36 +11,104 @@ namespace WebAPI.Controllers
     [ApiController]
     public class DirectorController : ControllerBase
     {
-        // GET: api/<DirectorController>
+
+        private readonly GenericRepocs<Director> _directorRepo;
+
+        public DirectorController(MovieDbContext db)
+        {
+            _directorRepo = new GenericRepocs<Director>(db);
+
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<IEnumerable<Director>> Get()
         {
-            return new string[] { "value1", "value2" };
-        }
+            //Retrieve all movies from the repository 
+            var directors = _directorRepo.GetAll();
+            //Return the list of movies as an Http 200 ok response 
+            var directorlist = directors.Select(director => new DirectorDto
+            {
+                Name = director.Name,
+              
 
-        // GET api/<DirectorController>/5
+            }).ToList();
+            return Ok(directorlist);
+
+        }
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult<Movies> GetById(int id)
         {
-            return "value";
-        }
+            //Retrieve a movie by its ID from the repository 
+            var director = _directorRepo.GetbyId(id);
+            //if the movie is not found ,return an HTTP 404 not found response 
+            if (director == null)
+            {
+                return NotFound();
+            }
+            //Return the movie as an Http 200 ok reposne 
 
-        // POST api/<DirectorController>
+            return Ok(director);
+        }
+        //Post:api/Movies 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult CreateMovie([FromBody] DirectorDto directorDto)
         {
-        }
 
-        // PUT api/<DirectorController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
+            try
+            {
+                var director = new Director
+                {
+                    Name=directorDto.Name,
+                    
+                };
+                _directorRepo.Create(director);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+            }
         }
+        [HttpDelete]
+        public ActionResult Delete(int id)
+        {
+            //Retreive the movie by its ID from the repository 
+            var director = _directorRepo.GetbyId(id);
+            //if the movie is not found ,return an HTTP 404 not Found response 
+            if (director == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                _directorRepo.Delete(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut]
+        public ActionResult UpdateMovie(int id,DirectorDto directorDto)
+        {
+            var existingdirector = _directorRepo.GetbyId(id);
+            if (existingdirector == null)
+            {
+                return NoContent();
+            }
+              existingdirector.Name=directorDto.Name;
+              
 
-        // DELETE api/<DirectorController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            try
+            {
+                _directorRepo.Update(id,existingdirector);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+
+            }
         }
-    }
-}
+}   }

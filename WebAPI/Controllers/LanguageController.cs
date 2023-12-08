@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebAPI.Dto;
+using WebAPI.Models;
+using WebAPI.Repo;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,36 +11,108 @@ namespace WebAPI.Controllers
     [ApiController]
     public class LanguageController : ControllerBase
     {
-        // GET: api/<LanguageController>
+        private readonly GenericRepocs<Language> _Languagerepocs;
+
+
+        public LanguageController(MovieDbContext db)
+        {
+            _Languagerepocs = new GenericRepocs<Language>(db);
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<IEnumerable<Language>> Get()
         {
-            return new string[] { "value1", "value2" };
-        }
+            //Retrieve all movies from the repository 
+            var languages =_Languagerepocs.GetAll();
+            //Return the list of movies as an Http 200 ok response 
+            var languagelist = languages.Select(languages => new LanguageDto
+            {
+                Name=languages.Name,
 
-        // GET api/<LanguageController>/5
+            }).ToList();
+            return Ok(languagelist);
+
+
+        }
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult<Movies> GetById(int id)
         {
-            return "value";
+            //Retrieve a movie by its ID from the repository 
+            var language = _Languagerepocs.GetbyId(id);
+            //if the movie is not found ,return an HTTP 404 not found response 
+            if (language  == null)
+            {
+                return NotFound();
+            }
+            //Return the movie as an Http 200 ok reposne 
+
+            return Ok(language );
         }
 
-        // POST api/<LanguageController>
+
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult CreateMovie([FromBody] LanguageDto lanuguageDto)
         {
+
+            try
+            {
+                var language = new Language
+                {
+                    Name = lanuguageDto.Name,
+                };
+                _Languagerepocs.Create(language);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+            }
         }
 
-        // PUT api/<LanguageController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpDelete]
+        public ActionResult Delete(int id)
         {
+            //Retreive the movie by its ID from the repository 
+            var language = _Languagerepocs.GetbyId(id);
+            //if the movie is not found ,return an HTTP 404 not Found response 
+            if (language == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                _Languagerepocs.Delete(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut]
+        public ActionResult UpdateMovie(int id,LanguageDto languagedto)
+        {
+            var existinglanguage = _Languagerepocs.GetbyId(id);
+            if (existinglanguage == null)
+            {
+             return NoContent();
+            }
+            existinglanguage.Name = languagedto.Name;       
+
+           try
+           {
+            _Languagerepocs.Update(id, existinglanguage);
+              return Ok();
+           }
+           catch (Exception ex)
+           {
+           return BadRequest(ex.Message);
+
+           }
         }
 
-        // DELETE api/<LanguageController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+
+
+
     }
-}
+ } 

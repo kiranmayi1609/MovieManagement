@@ -12,6 +12,6 @@ namespace WebAPI.Models
 
         public Movies Movies { get; set; }
 
-        public int MovieId { get; set; }
+        public int MoviesId { get; set; }
     }
 }

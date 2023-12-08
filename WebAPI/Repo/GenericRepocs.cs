@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq.Expressions;
+using System.Threading.Tasks.Dataflow;
 using WebAPI.Interfaces;
 using WebAPI.Models;
 
@@ -60,6 +61,36 @@ namespace WebAPI.Repo
         public IEnumerable<T> GetAll()
         {
             return _db.Set<T>().ToList();
+        }
+
+        public IEnumerable<object> GetAllData()
+        {
+            var query = from actor in _db.Set<Actor>()
+                        join movieActor in _db.Set<MovieActor>() on actor.Id equals movieActor.ActorId into actorMovies
+                        join award in _db.Set<Award>() on actor.Id equals award.MoviesId into actorAwards
+                        join movie in _db.Set<Movies>() on actor.Id equals movie.DirectorId into actorMovieDirectors
+                        //join genre in _db.Set<Genre>() on actor.Id equals genre.MoviesGenre.FirstOrDefault().MoviesId into actorGenres 
+                        join country in _db.Set<Country>() on actor.Id equals country.MoviesProduced.FirstOrDefault().MovieId into actorProducedMovies
+                        join review in _db.Set<Review>() on actor.Id equals review.Movies.MovieId into actorReviews
+                        join language in _db.Set<Language>() on actor.Id equals language.Movies.FirstOrDefault().MovieId into actorLanguages
+
+                        select new
+                        {
+                            Actor = actor,
+                            Movies = actorMovies,
+                            Awards = actorAwards,
+                            MovieDirectors = actorMovieDirectors,
+                            ProducedMovies = actorProducedMovies,
+                            Reviews = actorReviews,
+                            Language = actorLanguages
+
+
+                        };
+
+
+                   
+
+              return query.ToList();
         }
 
         public T GetbyId(int id)

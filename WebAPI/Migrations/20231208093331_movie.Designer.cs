@@ -12,8 +12,8 @@ using WebAPI.Repo;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(MovieDbContext))]
-    [Migration("20231128101006_Movieinit")]
-    partial class Movieinit
+    [Migration("20231208093331_movie")]
+    partial class movie
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,29 +26,29 @@ namespace WebAPI.Migrations
 
             modelBuilder.Entity("WebAPI.Models.Actor", b =>
                 {
-                    b.Property<int>("ActorId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ActorId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ActorId");
+                    b.HasKey("Id");
 
                     b.ToTable("actors");
 
                     b.HasData(
                         new
                         {
-                            ActorId = 1,
+                            Id = 1,
                             Name = "Actor1"
                         },
                         new
                         {
-                            ActorId = 2,
+                            Id = 2,
                             Name = "Actor2"
                         });
                 });
@@ -100,10 +100,7 @@ namespace WebAPI.Migrations
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MoviesMovieId")
+                    b.Property<int>("MoviesId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
@@ -111,11 +108,27 @@ namespace WebAPI.Migrations
 
                     b.HasKey("BookingId");
 
-                    b.HasIndex("MoviesMovieId");
+                    b.HasIndex("MoviesId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("bookings");
+
+                    b.HasData(
+                        new
+                        {
+                            BookingId = 1,
+                            BookingDate = new DateTime(2023, 12, 8, 10, 33, 31, 285, DateTimeKind.Local).AddTicks(1620),
+                            MoviesId = 1,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            BookingId = 2,
+                            BookingDate = new DateTime(2023, 12, 8, 10, 33, 31, 285, DateTimeKind.Local).AddTicks(1659),
+                            MoviesId = 2,
+                            UserId = 2
+                        });
                 });
 
             modelBuilder.Entity("WebAPI.Models.Country", b =>
@@ -133,6 +146,18 @@ namespace WebAPI.Migrations
                     b.HasKey("CountryId");
 
                     b.ToTable("countries");
+
+                    b.HasData(
+                        new
+                        {
+                            CountryId = 1,
+                            Name = "USA"
+                        },
+                        new
+                        {
+                            CountryId = 2,
+                            Name = "Canada"
+                        });
                 });
 
             modelBuilder.Entity("WebAPI.Models.Director", b =>
@@ -166,29 +191,29 @@ namespace WebAPI.Migrations
 
             modelBuilder.Entity("WebAPI.Models.Genre", b =>
                 {
-                    b.Property<int>("GenreId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GenreId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("GenreId");
+                    b.HasKey("Id");
 
                     b.ToTable("genres");
 
                     b.HasData(
                         new
                         {
-                            GenreId = 1,
+                            Id = 1,
                             Name = "Action"
                         },
                         new
                         {
-                            GenreId = 2,
+                            Id = 2,
                             Name = "Comedy"
                         });
                 });
@@ -233,17 +258,14 @@ namespace WebAPI.Migrations
                     b.Property<int>("ActorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MoviesMovieId")
+                    b.Property<int>("MoviesId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ActorId");
 
-                    b.HasIndex("MoviesMovieId");
+                    b.HasIndex("MoviesId");
 
                     b.ToTable("movieActors");
                 });
@@ -259,17 +281,14 @@ namespace WebAPI.Migrations
                     b.Property<int>("GenreId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MoviesMovieId")
+                    b.Property<int>("MoviesId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GenreId");
 
-                    b.HasIndex("MoviesMovieId");
+                    b.HasIndex("MoviesId");
 
                     b.ToTable("movieGenres");
                 });
@@ -315,7 +334,7 @@ namespace WebAPI.Migrations
                         new
                         {
                             MovieId = 2,
-                            DirectorId = 1,
+                            DirectorId = 2,
                             Title = "Movie 2"
                         });
                 });
@@ -332,10 +351,7 @@ namespace WebAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MoviesMovieId")
+                    b.Property<int>("MoviesId")
                         .HasColumnType("int");
 
                     b.Property<int>("Rating")
@@ -346,11 +362,27 @@ namespace WebAPI.Migrations
 
                     b.HasKey("ReviewId");
 
-                    b.HasIndex("MoviesMovieId");
+                    b.HasIndex("MoviesId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("reviews");
+
+                    b.HasData(
+                        new
+                        {
+                            ReviewId = 1,
+                            Comment = "Great movie!",
+                            MoviesId = 1,
+                            Rating = 5
+                        },
+                        new
+                        {
+                            ReviewId = 2,
+                            Comment = "Awesome director!",
+                            MoviesId = 2,
+                            Rating = 4
+                        });
                 });
 
             modelBuilder.Entity("WebAPI.Models.User", b =>
@@ -361,7 +393,19 @@ namespace WebAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -372,6 +416,26 @@ namespace WebAPI.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            FirstName = "John",
+                            LastName = "Doe",
+                            Password = "password",
+                            Role = "Admin",
+                            UserName = "john.doe"
+                        },
+                        new
+                        {
+                            UserId = 2,
+                            FirstName = "Jane",
+                            LastName = "Doe",
+                            Password = "password",
+                            Role = "User",
+                            UserName = "jane.doe"
+                        });
                 });
 
             modelBuilder.Entity("WebAPI.Models.Award", b =>
@@ -389,7 +453,7 @@ namespace WebAPI.Migrations
                 {
                     b.HasOne("WebAPI.Models.Movies", "Movies")
                         .WithMany()
-                        .HasForeignKey("MoviesMovieId")
+                        .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -414,7 +478,7 @@ namespace WebAPI.Migrations
 
                     b.HasOne("WebAPI.Models.Movies", "Movies")
                         .WithMany()
-                        .HasForeignKey("MoviesMovieId")
+                        .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -433,7 +497,7 @@ namespace WebAPI.Migrations
 
                     b.HasOne("WebAPI.Models.Movies", "Movies")
                         .WithMany("MoviesGenre")
-                        .HasForeignKey("MoviesMovieId")
+                        .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -465,7 +529,7 @@ namespace WebAPI.Migrations
                 {
                     b.HasOne("WebAPI.Models.Movies", "Movies")
                         .WithMany("Reviews")
-                        .HasForeignKey("MoviesMovieId")
+                        .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

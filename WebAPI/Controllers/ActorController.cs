@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebAPI.Dto;
+using WebAPI.Models;
+using WebAPI.Repo;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,36 +11,115 @@ namespace WebAPI.Controllers
     [ApiController]
     public class ActorController : ControllerBase
     {
+        private readonly GenericRepocs<Actor> _actorRepo;
         // GET: api/<ActorController>
+         //constructor injection of MovieDbcontext to initilize the repositorry 
+        public ActorController(MovieDbContext db)
+        {
+            _actorRepo = new GenericRepocs<Actor>(db);
+        }
         [HttpGet]
-        public IEnumerable<string> Get()
+        public  ActionResult <IEnumerable<Actor>>GetAllActors ()
         {
-            return new string[] { "value1", "value2" };
+            //Retrieve all actors from the repo
+            var actor = _actorRepo.GetAll();
+            //Return the list of actors as an http 200 ok response 
+
+            var AllActors=actor.Select(actor=>new ActorDto
+            {
+                ActorId=actor.Id,
+                Name=actor.Name,
+            }).ToList();
+                
+            return Ok(AllActors);
         }
 
-        // GET api/<ActorController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult<Actor> GetActorById(int id)
         {
-            return "value";
+            //Retrieve all actors  id from the repository 
+           
+            var actor = _actorRepo.GetbyId(id);
+            if(actor == null)
+            {
+                return NotFound();
+            }
+            return Ok(actor);
         }
-
-        // POST api/<ActorController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult CreateActor([FromBody] ActorDto actordto )
         {
-        }
+            try
+            {
+                var actors = new Actor
+                {
+                    Name = actordto.Name,
+                };
+                _actorRepo.Create(actors);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+            }
 
-        // PUT api/<ActorController>/5
+
+
+            
+        }
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult UpdateActor(int id, [FromBody]ActorDto actordto)
         {
+            var exisitngActor = _actorRepo.GetbyId(id);
+            if(exisitngActor==null)
+            {
+                return NoContent();
+            }
+            exisitngActor.Name = actordto.Name;
+            try
+            {
+                _actorRepo.Update(id, exisitngActor);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-
-        // DELETE api/<ActorController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult DeleteActor(int id )
         {
+            var actor=_actorRepo.GetbyId(id);
+            // if the actor is not found ,return Http 404 not found respomnse 
+            if(actor==null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                _actorRepo.Delete(id);
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+        //[HttpGet("movieswithgenre/{genrename}")]
+
+        //public IEnumerable<Actor>GetActorwithgenre(string genrename )
+        //{
+        //    return _actorRepo.GetMoviesWithGenre(genrename);
+        //}
+        //[HttpGet("moviewithdirectors/{directorname}")]
+        //public IEnumerable<Actor>getActorwithdirectors(string directorname )
+        //{
+        //    return _actorRepo.GetMovieswithDirectors(directorname);
+        //}
     }
+    
+
+
 }
+

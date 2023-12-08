@@ -16,6 +16,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<MovieDbContext>(option =>
 option.UseSqlServer(builder.Configuration.GetConnectionString("connection"))); // design pattern that connects to the database
 builder.Services.AddScoped<IGeneric<Movies>, GenericRepocs<Movies>>();
+builder.Services.AddScoped<IGeneric<Actor>, GenericRepocs<Actor>>();
+builder.Services.AddScoped<IGeneric<Award>,GenericRepocs<Award>>();
+builder.Services.AddScoped<IGeneric<Booking>, GenericRepocs<Booking>>();
+builder.Services.AddScoped<IGeneric<Country>, GenericRepocs<Country>>();
+builder.Services.AddScoped<IGeneric<Genre>, GenericRepocs<Genre>>();
+builder.Services.AddScoped<IGeneric<Language>, GenericRepocs<Language>>();
+builder.Services.AddScoped<IGeneric<Review>, GenericRepocs<Review>>();
+builder.Services.AddScoped<IGeneric<User>, GenericRepocs<User>>();
 
 var app = builder.Build();
 

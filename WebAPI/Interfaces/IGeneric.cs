@@ -5,12 +5,12 @@ namespace WebAPI.Interfaces
     public interface IGeneric<T>  where T : class
 
     {
-       IEnumerable<T> GetAll();
-       T GetbyId(int id);
+         IEnumerable<T> GetAll();
+        T GetbyId(int id);
 
-       void Create (T entity);
+         void Create (T entity);
 
-       void Update (int id, T entity);
+        void Update (int id, T entity);
 
        void Delete (int id );
         //T GetDetails(int id, params Expression<Func<T, object>>[] includes);
@@ -22,6 +22,6 @@ namespace WebAPI.Interfaces
         //method to get entities with sepcific includes based on a predicate 
 
        public  IEnumerable<T> GetEntitiesWithIncludes(Func<T, bool> predicate, params Expression<Func<T, object>>[] includes);
-
+        public IEnumerable<object> GetAllData();
     }
 }

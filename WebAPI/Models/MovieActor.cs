@@ -6,7 +6,7 @@ namespace WebAPI.Models
     {
         [Key]
         public int Id { get; set; }
-        public int MovieId { get; set; }
+        public int MoviesId { get; set; }
         public Movies Movies { get; set; }
         public Actor Actor { get; set; }
 
