@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using WebAPI.Interfaces;
 using WebAPI.Models;
 using WebAPI.Repo;
+using Microsoft.Extensions.DependencyInjection;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//client configuration 
+
+builder.Services.AddCors(options => options.AddPolicy("AllowAllOrigins", builder =>
+{
+    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+}));
 
 // Database
 builder.Services.AddDbContext<MovieDbContext>(option =>
@@ -27,12 +36,17 @@ builder.Services.AddScoped<IGeneric<User>, GenericRepocs<User>>();
 
 var app = builder.Build();
 
+
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowAllOrigins");
 
 app.UseHttpsRedirection();
 

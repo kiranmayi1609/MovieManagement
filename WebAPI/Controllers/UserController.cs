@@ -40,6 +40,9 @@ namespace WebAPI.Controllers
             {
                 var newuser = new User
                 {
+                    FirstName = userDto.FirstName,
+                    LastName = userDto.LastName,
+                    Role=userDto.Role,
                     UserName = userDto.UserName,
                     Password = userDto.Password,
                 };
