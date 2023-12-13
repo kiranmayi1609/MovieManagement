@@ -26,7 +26,9 @@ namespace WebAPI.Controllers
 
             var awardslist = awards.Select(awards => new AwardDto
             {
+                AwardId=awards.AwardId,
                 AwardName = awards.AwardName,
+                MovieId=awards.MoviesId
             }).ToList();
 
             return Ok(awardslist);

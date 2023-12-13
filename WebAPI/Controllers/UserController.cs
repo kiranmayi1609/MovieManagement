@@ -36,6 +36,10 @@ namespace WebAPI.Controllers
         [HttpPost("register")]
         public ActionResult RegisterUser([FromBody] UsersDto userDto)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             try
             {
                 var newuser = new User
@@ -55,25 +59,63 @@ namespace WebAPI.Controllers
 
             }
         }
+        //[HttpPost("authenticate")]
+        //public ActionResult AuthenticateUser([FromBody] LoginDto loginDto)
+        //{
+        //    try
+        //    {
+        //        var user = _userRepository.GetAll().FirstOrDefault(u => u.UserName == loginDto.UserName && u.Password == loginDto.Password && u.Role==loginDto.Role);
+        //        if(user== null )
+        //        {
+        //            return Unauthorized("Invalid usernmae or password");
+        //        }
+        //        return Ok(new {Message="Authentication successful",UserId=user.UserId});    
+
+
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
         [HttpPost("authenticate")]
-        public ActionResult AuthenticateUser([FromBody] UsersDto usersDto)
+        public ActionResult AuthenticateUser([FromBody] LoginDto loginDto)
         {
             try
             {
-                var user = _userRepository.GetAll().SingleOrDefault(u => u.UserName == usersDto.UserName && u.Password == usersDto.Password);
-                if(user== null )
+                if (!ModelState.IsValid)
                 {
-                    return Unauthorized("Invalid usernmae or password");
+                    // Model validation failed, return the validation errors
+                    return BadRequest(new
+                    {
+                        Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                        Title = "One or more validation errors occurred.",
+                        Status = 400,
+                        Errors = ModelState.Values
+                            .SelectMany(v => v.Errors.Select(e => e.ErrorMessage))
+                            .ToList()
+                    });
                 }
-                return Ok(new {Message="Authentication successful",UserId=user.UserId});    
 
+                var user = _userRepository.GetAll().FirstOrDefault(u =>
+                    u.UserName == loginDto.UserName &&
+                    u.Password == loginDto.Password &&
+                    u.Role == loginDto.Role);
 
+                if (user == null)
+                {
+                    return Unauthorized("Invalid username or password");
+                }
+
+                return Ok(new { Message = "Authentication successful", UserId = user.UserId });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
 
     }
 }

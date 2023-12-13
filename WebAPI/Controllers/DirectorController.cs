@@ -28,6 +28,7 @@ namespace WebAPI.Controllers
             //Return the list of movies as an Http 200 ok response 
             var directorlist = directors.Select(director => new DirectorDto
             {
+                DirectorId=director.DirectorId,
                 Name = director.Name,
               
 

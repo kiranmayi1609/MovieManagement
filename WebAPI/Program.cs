@@ -33,6 +33,7 @@ builder.Services.AddScoped<IGeneric<Genre>, GenericRepocs<Genre>>();
 builder.Services.AddScoped<IGeneric<Language>, GenericRepocs<Language>>();
 builder.Services.AddScoped<IGeneric<Review>, GenericRepocs<Review>>();
 builder.Services.AddScoped<IGeneric<User>, GenericRepocs<User>>();
+builder.Services.AddScoped<IGeneric<MovieActor>, GenericRepocs<MovieActor>>();
 
 var app = builder.Build();
 

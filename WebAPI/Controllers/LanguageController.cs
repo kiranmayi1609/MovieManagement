@@ -27,7 +27,8 @@ namespace WebAPI.Controllers
             //Return the list of movies as an Http 200 ok response 
             var languagelist = languages.Select(languages => new LanguageDto
             {
-                Name=languages.Name,
+                LanguageId=languages.LanguageId,
+                Name=languages.Name
 
             }).ToList();
             return Ok(languagelist);
