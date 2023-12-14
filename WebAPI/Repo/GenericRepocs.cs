@@ -137,22 +137,7 @@ namespace WebAPI.Repo
             //_db.SaveChanges();
         }
 
-        //public T GetDetails(int id, params Expression<Func<T, object>>[] includes)
-        //{
-        //    // Start building the query by getting a set of the entity type
-        //    var query = _db.Set<T>().AsQueryable();
-
-        //    // Iterate through the provided include expressions
-        //    foreach (var include in includes)
-        //    {
-        //        // Add each include expression to the query
-        //        query = query.Include(include);
-        //    }
-
-        //    // Execute the query, including the specified related entities, and filter by the given 'id'
-        //    return query.FirstOrDefault(e => e.Id == id);
-        //    // Replace 'Id' with the actual primary key property of your entity
-        //}
+       
 
     }
 }

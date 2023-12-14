@@ -51,7 +51,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateMovie([FromBody] AwardDto awarddto)
+        public ActionResult CreateAward([FromBody] AwardDto awarddto)
         {
 
             try
@@ -70,13 +70,13 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
             //Retreive the movie by its ID from the repository 
-            var movie = _awardRepo.GetbyId(id);
+            var award = _awardRepo.GetbyId(id);
             //if the movie is not found ,return an HTTP 404 not Found response 
-            if (movie == null)
+            if (award == null)
             {
                 return NotFound();
             }
@@ -94,8 +94,8 @@ namespace WebAPI.Controllers
             ////Return an HTTP 204 no content reposne 
             //return NoContent();
         }
-        [HttpPut]
-        public ActionResult UpdateMovie(int id, AwardDto awardDto)
+        [HttpPut("{id}")]
+        public ActionResult UpdateAward(int id, AwardDto awardDto)
         {
             var existingawards = _awardRepo.GetbyId(id);
             if (existingawards == null)

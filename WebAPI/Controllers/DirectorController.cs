@@ -70,7 +70,7 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
             }
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
             //Retreive the movie by its ID from the repository 
@@ -90,7 +90,7 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut]
+        [HttpPut("{id}")]
         public ActionResult UpdateMovie(int id,DirectorDto directorDto)
         {
             var existingdirector = _directorRepo.GetbyId(id);

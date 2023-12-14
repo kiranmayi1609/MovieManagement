@@ -64,7 +64,7 @@ namespace WebAPI.Controllers
             //if the model state is not valid ,return an Http 400 bad request response 
             return BadRequest(ModelState);
         }
-        [HttpPut]
+        [HttpPut("{id}")]
         public ActionResult Delete(int id)
         {
             //Retreive the genre by its ID from the repository 
@@ -94,6 +94,26 @@ namespace WebAPI.Controllers
             //return NoContent();
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult DeleteActor(int id)
+        {
+            var genre = _GenreRepository.GetbyId(id);
+            // if the actor is not found ,return Http 404 not found respomnse 
+            if (genre == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+             _GenreRepository.Delete(id);
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }

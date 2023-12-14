@@ -74,7 +74,7 @@ namespace WebAPI.Controllers
         //}
 
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
             //Retreive the movie by its ID from the repository 

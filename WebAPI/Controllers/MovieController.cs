@@ -54,7 +54,7 @@ namespace WebAPI.Controllers
         }
         //Post:api/Movies 
         [HttpPost]
-        public ActionResult CreateMovie([FromBody] MoviesDTO moviedto)
+        public IActionResult CreateMovie([FromBody] MoviesDTO moviedto)
         {
 
             try
@@ -82,8 +82,8 @@ namespace WebAPI.Controllers
             ////if the model state is not valid ,return an Http 400 bad request response 
             //return BadRequest(ModelState);
         }
-        [HttpDelete]
-        public ActionResult Delete(int id )
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id )
         {
             //Retreive the movie by its ID from the repository 
             var movie=_MovieRepository.GetbyId(id);
@@ -106,8 +106,8 @@ namespace WebAPI.Controllers
             ////Return an HTTP 204 no content reposne 
             //return NoContent();
         }
-        [HttpPut]
-        public ActionResult UpdateMovie(int id ,MoviesDTO movieDto)
+        [HttpPut("{id}")]
+        public IActionResult UpdateMovie(int id ,MoviesDTO movieDto)
         {
             var existingMovie=_MovieRepository.GetbyId(id);
             if(existingMovie == null)

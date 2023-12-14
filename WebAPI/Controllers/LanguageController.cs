@@ -60,6 +60,7 @@ namespace WebAPI.Controllers
                 var language = new Language
                 {
                     Name = lanuguageDto.Name,
+                    
                 };
                 _Languagerepocs.Create(language);
                 return Ok();
@@ -70,7 +71,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
             //Retreive the movie by its ID from the repository 
@@ -90,7 +91,7 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut]
+        [HttpPut("{id}")]
         public ActionResult UpdateMovie(int id,LanguageDto languagedto)
         {
             var existinglanguage = _Languagerepocs.GetbyId(id);

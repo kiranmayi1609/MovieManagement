@@ -12,12 +12,20 @@ namespace WebAPI.Controllers
     public class ActorController : ControllerBase
     {
         private readonly GenericRepocs<Actor> _actorRepo;
+        private GenericRepocs<Actor> actualRepoInstance;
+
         // GET: api/<ActorController>
-         //constructor injection of MovieDbcontext to initilize the repositorry 
+        //constructor injection of MovieDbcontext to initilize the repositorry 
         public ActorController(MovieDbContext db)
         {
             _actorRepo = new GenericRepocs<Actor>(db);
         }
+
+        public ActorController(GenericRepocs<Actor> actualRepoInstance)
+        {
+            this.actualRepoInstance = actualRepoInstance;
+        }
+
         [HttpGet]
         public  ActionResult <IEnumerable<Actor>>GetAllActors ()
         {

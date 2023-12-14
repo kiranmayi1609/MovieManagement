@@ -55,7 +55,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest("An error occured during user registration :{ex.Message}");
 
             }
         }
